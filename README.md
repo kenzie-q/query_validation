@@ -19,9 +19,11 @@ The data referenced in this project is from [Amazon esci-data](https://github.co
 
 ## Approach 
 
-Begin by using a local LLM (Mistral) to extract structured product attributes from product titles and product queries. Specific attributes being extracted are brand, product type, size, quantity, and finish. The LLM is instructed to output product attributes in a JSON format. 
+Begin by using a local LLM (Mistral) to extract structured product attributes from product titles, then product queries. The LLM is instructed to output product attributes in a JSON format. 
 
-Then we can compare the two attribute dictionaries to determine if the key:value pairs are similar. If there are contradictions, the query attribute dictionary is adjusted and that corrected query dictionary is sent to an LLM to rephrase the query. If no contradictions are found, no corrections are made and the origianl query can be reuturned.
+Then we ask another LLM to compare the two attribute dictionaries to determine if the product dictionary satifies the query dictionary. Respond with a JSON following this format: `{"satisfied": true or false, "fixed_query": {{ ... }} }`. If satisfied is true, return the original query, otherwise, send the `fixed_query` dictionary to an LLM to rephrase the query.
+
+**Fine-tuning to this system needs to be done through prompt engineering**
 
 LLM: `mistral-7b-instruct-v0.2.Q3_K_M.gguf`
 
