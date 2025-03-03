@@ -222,39 +222,6 @@ def main(df):
     return df_results
 
 
-# def main(df):
-#     '''
-#     Run LLM against query-product pairings to verify label accuacy and provide
-#     new query if query is incorrect. Results df written out data directory and 
-#     returned. 
-#     Input: 
-#         df (pd.DataFrame): DataFrame of query-product pairings
-#     Return:
-#         df_results (pd.DataFrame): DataFrame of LLM results
-#     '''
-#     results = []
-#     llm = get_llm()  
-
-#     #do all query related attribute extractions and refrence to maintian consistent comparision, & reduce runtime 
-#     df_query = df[['query_id', 'query']].drop_duplicates()
-#     query_attributes_dict = {row['query_id']: json_parse(extract_attributes(llm, row['query'])) for _, row in df_query.iterrows()}
-#     print(query_attributes_dict)
-#     for idx, row in df.iterrows():
-#         product_attributes = json_parse(extract_attributes(llm, row['product_title']))
-#         is_correct, corrected_query = compare_attributes(row['query_id'], query_attributes_dict[row['query_id']], product_attributes)
-#         if is_correct:
-#             corrected_query = row['query']
-#         else: 
-#             corrected_query = get_corrected_query(llm, corrected_query)
-#         results.append([row['query_id'], row['product_id'], is_correct, corrected_query])
-#         print(product_attributes)
-#         print(is_correct, corrected_query)
-#         print(f'{len(results)} of {len(df)}')
-#     df_results = pd.DataFrame(results, columns=['query_id', 'product_id', 'is_correct', 'corrected_query'])
-#     #writeout df
-#     df_results.to_csv(config.output_path, index=False)
-#     return df_results
-
 
 ### ARCHIVE
 
@@ -386,3 +353,36 @@ def main(df):
 
 #     response = llm(prompt, max_tokens=100, temperature=0.2, stop=['}'])
 #     return (response['choices'][0]['text']+'}')
+
+# def main(df):
+#     '''
+#     Run LLM against query-product pairings to verify label accuacy and provide
+#     new query if query is incorrect. Results df written out data directory and 
+#     returned. 
+#     Input: 
+#         df (pd.DataFrame): DataFrame of query-product pairings
+#     Return:
+#         df_results (pd.DataFrame): DataFrame of LLM results
+#     '''
+#     results = []
+#     llm = get_llm()  
+
+#     #do all query related attribute extractions and refrence to maintian consistent comparision, & reduce runtime 
+#     df_query = df[['query_id', 'query']].drop_duplicates()
+#     query_attributes_dict = {row['query_id']: json_parse(extract_attributes(llm, row['query'])) for _, row in df_query.iterrows()}
+#     print(query_attributes_dict)
+#     for idx, row in df.iterrows():
+#         product_attributes = json_parse(extract_attributes(llm, row['product_title']))
+#         is_correct, corrected_query = compare_attributes(row['query_id'], query_attributes_dict[row['query_id']], product_attributes)
+#         if is_correct:
+#             corrected_query = row['query']
+#         else: 
+#             corrected_query = get_corrected_query(llm, corrected_query)
+#         results.append([row['query_id'], row['product_id'], is_correct, corrected_query])
+#         print(product_attributes)
+#         print(is_correct, corrected_query)
+#         print(f'{len(results)} of {len(df)}')
+#     df_results = pd.DataFrame(results, columns=['query_id', 'product_id', 'is_correct', 'corrected_query'])
+#     #writeout df
+#     df_results.to_csv(config.output_path, index=False)
+#     return df_results
